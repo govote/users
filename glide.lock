@@ -1,0 +1,60 @@
+hash: e5917cdfab25aff73af0bf6e7980b65767c87899c9c378455047c1e71c10d9a7
+updated: 2016-07-05T00:21:07.6185634-03:00
+imports:
+- name: github.com/joho/godotenv
+  version: 4ed13390c0acd2ff4e371e64d8b97c8954138243
+  subpackages:
+  - github.com\joho\godotenv
+- name: github.com/labstack/echo
+  version: c00d017178d23261895b096b6e39e9b6bbca37dc
+  subpackages:
+  - github.com\labstack\echo\engine\standard
+  - github.com\labstack\echo
+  - github.com\labstack\echo\engine
+  - github.com\labstack\echo\log
+- name: github.com/labstack/gommon
+  version: 722aa12d41c236ce78ff48eac1cafe0107ecdc9d
+  subpackages:
+  - github.com\labstack\gommon\log
+  - github.com\labstack\gommon\color
+- name: github.com/mattn/go-colorable
+  version: 9056b7a9f2d1f2d96498d6d146acd1f9d5ed3d59
+  subpackages:
+  - github.com\mattn\go-colorable
+- name: github.com/mattn/go-isatty
+  version: 56b76bdf51f7708750eac80fa38b952bb9f32639
+  subpackages:
+  - github.com\mattn\go-isatty
+- name: github.com/satori/go.uuid
+  version: 879c5887cd475cd7864858769793b2ceb0d44feb
+  subpackages:
+  - github.com\satori\go.uuid
+- name: github.com/valyala/fasttemplate
+  version: 3b874956e03f1636d171bda64b130f9135f42cff
+  subpackages:
+  - github.com\valyala\fasttemplate
+- name: github.com/vitorsalgado/la-democracia
+  version: 57e39dd8ee1fd59a726969aa978f4281141a687d
+  subpackages:
+  - github.com\vitorsalgado\democracia-direta\lib\domain
+  - github.com\vitorsalgado\democracia-direta\lib\logger
+  - github.com\vitorsalgado\democracia-direta\lib\messages
+  - github.com\vitorsalgado\democracia-direta\lib\validator
+- name: godotenv
+  version: ""
+- name: golang.org/x/net
+  version: b400c2eff1badec7022a8c8f5bea058b6315eed7
+  subpackages:
+  - golang.org\x\net\context
+- name: golang.org/x/sys
+  version: a408501be4d17ee978c04a618e7a1b22af058c0e
+  subpackages:
+  - golang.org\x\sys\unix
+- name: gopkg.in/mgo.v2
+  version: 29cc868a5ca65f401ff318143f9408d02f4799cc
+  subpackages:
+  - gopkg.in\mgo.v2
+  - gopkg.in\mgo.v2\bson
+  - gopkg.in\mgo.v2\internal\sasl
+  - gopkg.in\mgo.v2\internal\scram
+devImports: []

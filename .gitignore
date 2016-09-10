@@ -22,3 +22,12 @@ _testmain.go
 *.exe
 *.test
 *.prof
+
+.vscode
+.idea
+
+DEBUG
+vendor
+debug
+
+.env

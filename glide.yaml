@@ -1,0 +1,5 @@
+package: github.com/vitorsalgado/la-democracia/auth
+import:
+- package: github.com/labstack/echo
+- package: godotenv
+- package: github.com/joho/godotenv
