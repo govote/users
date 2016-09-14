@@ -3,33 +3,39 @@ package controllers
 import (
 	"net/http"
 
+	"github.com/deputadosemfoco/go-libs/messages"
+	"github.com/deputadosemfoco/users/interactors"
 	"github.com/labstack/echo"
-	"github.com/vitorsalgado/la-democracia/auth/services"
 )
 
-// UserCtrl handles all requests related to User
-type UserCtrl struct {
-}
+type (
+	RegistrationInteractor interface {
+		Register(req *interactors.RegistrationRequest) interactors.RegistrationResult
+	}
 
-// NewUserCtrl returns a new instance of UserCtrl
-func NewUserCtrl() *UserCtrl {
-	return &UserCtrl{}
-}
+	UserCtrl struct {
+		Interactor RegistrationInteractor
+	}
+)
 
-// Register registers a user if needed and returns OK if all operations were successful
-func (ctrl *UserCtrl) Register(c echo.Context) error {
-	req := new(services.RegistrationRequest)
+func (ctrl *UserCtrl) Post(c echo.Context) error {
+	req := new(interactors.RegistrationRequest)
 
 	if err := c.Bind(req); err != nil {
 		return err
 	}
 
-	svc := services.NewRegistrationService()
-	res := svc.Register(req)
+	res := ctrl.Interactor.Register(req)
 
 	if res.Success {
-		return c.JSON(http.StatusOK, res)
+		code := http.StatusOK
+
+		if res.Created {
+			code = http.StatusCreated
+		}
+
+		return c.JSON(code, res.Data)
 	}
 
-	return c.JSON(http.StatusBadRequest, res)
+	return c.JSON(http.StatusBadRequest, messages.Error{Message: res.Message, ValidationMessages: res.ValidationMessages})
 }

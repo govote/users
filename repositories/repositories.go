@@ -1,26 +1,15 @@
-package users
+package repositories
 
-import "github.com/vitorsalgado/la-democracia/lib/go/sqldb"
-
-type (
-	// UserRepository interface for User related data access
-	UserRepository interface {
-		Save(user User)
-		FindByEmail(email string) OptionalUser
-	}
-
-	// SQLUserRepository is a MySQL implementation for UserRepository
-	SQLUserRepository struct {
-	}
+import (
+	"github.com/deputadosemfoco/go-libs/sqldb"
+	"github.com/deputadosemfoco/users/domain"
 )
 
-// NewUserRepository returns a new UserRepository instance
-func NewUserRepository() *SQLUserRepository {
-	return &SQLUserRepository{}
-}
+// SQLUserRepository is a MySQL implementation for UserRepository
+type SQLUserRepository struct{}
 
 // Save the User to data store
-func (repo *SQLUserRepository) Save(user User) {
+func (repo *SQLUserRepository) Save(user domain.User) {
 	db := sqldb.Connect()
 	sql := ""
 
@@ -36,16 +25,16 @@ func (repo *SQLUserRepository) Save(user User) {
 // FindByEmail searches a User by its email.
 // Must receive a valid email address
 // Returns a OptionalUser that may or may not contain a User inside
-func (repo *SQLUserRepository) FindByEmail(email string) OptionalUser {
+func (repo *SQLUserRepository) FindByEmail(email string) domain.OptionalUser {
 	db := sqldb.Connect()
 	sql := "SELECT id, name, email, photoUrl, facebookId, googleId, createdAt, updatedAt FROM user WHERE email = ?"
-	user := User{}
+	user := domain.User{}
 
 	err := db.Get(user, sql, email)
 
 	if err != nil {
-		return OptionalUser{Valid: false}
+		return domain.OptionalUser{Valid: false}
 	}
 
-	return OptionalUser{Valid: true, User: user}
+	return domain.OptionalUser{Valid: true, User: user}
 }

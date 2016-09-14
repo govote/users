@@ -1,10 +1,10 @@
-package users
+package domain
 
 import (
 	"time"
 
+	"github.com/deputadosemfoco/go-libs/domain"
 	"github.com/satori/go.uuid"
-	"github.com/vitorsalgado/la-democracia/lib/go/domain"
 )
 
 type (
@@ -24,6 +24,12 @@ type (
 	OptionalUser struct {
 		Valid bool
 		User  User
+	}
+
+	// UserRepository interface for User related data access
+	UserRepository interface {
+		Save(user User)
+		FindByEmail(email string) OptionalUser
 	}
 )
 

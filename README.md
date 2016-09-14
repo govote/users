@@ -4,5 +4,8 @@
 ## Description
 **Deputados em Foco** users and auth service.
 
-## Technologies
-* Go.
+## Required ENV vars
+
+GO_ENV ("development" || "production")
+PORT 
+APP_VERSION 

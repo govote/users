@@ -7,13 +7,7 @@ import (
 )
 
 // HealthCtrl is the controller responsible for health verifications
-type HealthCtrl struct {
-}
-
-// NewHealthCtrl returns a new instance of HealthCtrl
-func NewHealthCtrl() *HealthCtrl {
-	return &HealthCtrl{}
-}
+type HealthCtrl struct{}
 
 // Check simple returns an OK if application is running
 func (ctrl *HealthCtrl) Check(c echo.Context) error {

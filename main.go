@@ -2,27 +2,32 @@ package main
 
 import (
 	"fmt"
-	"log"
 	"os"
 
+	"github.com/deputadosemfoco/users/routes"
+	"github.com/dimiro1/banner"
 	_ "github.com/go-sql-driver/mysql"
 
 	"github.com/joho/godotenv"
 	"github.com/labstack/echo/engine/standard"
-	"github.com/vitorsalgado/la-democracia/auth/routes"
 )
 
 func main() {
-	err := godotenv.Load()
+	godotenv.Load()
 
-	if err != nil {
-		log.Fatalf("%s : %s", "error loading .env file", err)
-	}
+	in, _ := os.Open("banner.txt")
+	defer in.Close()
+	banner.Init(os.Stdout, true, false, in)
 
 	e := routes.SetUp()
-	port := os.Getenv("UserService_Port")
 
-	fmt.Printf("auth service running on port %s", port)
+	if os.Getenv("GO_ENV") == "development" {
+		e.SetDebug(true)
+	}
+
+	port := os.Getenv("PORT")
+
+	fmt.Printf("auth service wiil run on port %s", port)
 
 	e.Run(standard.New(":" + port))
 }

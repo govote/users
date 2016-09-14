@@ -1,5 +1,7 @@
-package: github.com/vitorsalgado/la-democracia/auth
+package: github.com/deputadosemfoco/users
 import:
 - package: github.com/labstack/echo
-- package: godotenv
+- package: github.com/satori/go.uuid
 - package: github.com/joho/godotenv
+- package: github.com/dimiro1/banner
+- package: github.com/stretchr/testify
