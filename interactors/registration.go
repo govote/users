@@ -7,8 +7,7 @@ import (
 )
 
 type (
-	// RegistrationRequest represents the required information
-	// to register of login a User
+	// RegistrationRequest represents the required information to register or login a User
 	RegistrationRequest struct {
 		messages.Request
 		Name       string
@@ -22,7 +21,7 @@ type (
 		Created bool
 	}
 
-	// RegistrationService is the interface for all registration operations
+	// RegistrationInteractor is the interface for all registration operations
 	RegistrationInteractor struct {
 		UserRepository domain.UserRepository
 	}
