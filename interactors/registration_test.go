@@ -8,57 +8,63 @@ import (
 	"github.com/stretchr/testify/mock"
 )
 
-func TestUserWithoutEmailSholdReturnSuccessFalse(t *testing.T) {
+func TestUserWithoutEmailSholdReturnError(t *testing.T) {
 	req := new(RegistrationRequest)
 	req.Name = "vitor"
 	req.FacebookID = "32132"
-	req.FacebookAccessToken = "rewrw"
+	req.FacebookAccessToken = "valid"
 	req.PhotoURL = "http://photo.url.com.br"
 
-	interactor := new(RegistrationInteractor)
-	interactor.UserRepository = new(FakeUserRepository)
-	interactor.FacebookGraphAPI = new(FakeFacebookGraphApi)
-
-	res, err := interactor.Register(req)
-
-	assert.NotNil(t, err)
-	assert.Nil(t, res)
-	assert.NotEmpty(t, err.Error())
-}
-
-func TestUserWithoutNameSholdReturnSuccessFalse(t *testing.T) {
-	req := new(RegistrationRequest)
-	req.Email = "test@test.com"
-	req.FacebookID = "32132"
-	req.FacebookAccessToken = "rewrw"
-	req.PhotoURL = "http://photo.url.com.br"
+	graph := new(fakeFacebookGraphAPI)
+	graph.On("ValidateAccessToken", req.FacebookAccessToken).Return(true)
 
 	interactor := new(RegistrationInteractor)
-	interactor.UserRepository = new(FakeUserRepository)
-	interactor.FacebookGraphAPI = new(FakeFacebookGraphApi)
+	interactor.UserRepository = new(fakeUserRepository)
+	interactor.FacebookGraphAPI = graph
 
-	res, err := interactor.Register(req)
+	_, err := interactor.Register(req)
 
-	assert.Nil(t, res)
 	assert.NotNil(t, err)
 	assert.NotEmpty(t, err.Error())
 }
 
-func TestUerWithoutFBIdSholdReturnSuccessFalse(t *testing.T) {
+func TestUserWithoutNameSholdReturnError(t *testing.T) {
+	req := new(RegistrationRequest)
+	req.Email = "test@test.com"
+	req.FacebookID = "32132"
+	req.FacebookAccessToken = "valid"
+	req.PhotoURL = "http://photo.url.com.br"
+
+	graph := new(fakeFacebookGraphAPI)
+	graph.On("ValidateAccessToken", req.FacebookAccessToken).Return(true)
+
+	interactor := new(RegistrationInteractor)
+	interactor.UserRepository = new(fakeUserRepository)
+	interactor.FacebookGraphAPI = graph
+
+	_, err := interactor.Register(req)
+
+	assert.NotNil(t, err)
+	assert.NotEmpty(t, err.Error())
+}
+
+func TestUerWithoutFBIdSholdReturnError(t *testing.T) {
 	req := new(RegistrationRequest)
 	req.Email = "test@test.com"
 	req.Name = "vitor"
-	req.FacebookAccessToken = "rewrw"
+	req.FacebookAccessToken = "valid"
 	req.PhotoURL = "http://photo.url.com.br"
 
+	graph := new(fakeFacebookGraphAPI)
+	graph.On("ValidateAccessToken", req.FacebookAccessToken).Return(true)
+
 	interactor := new(RegistrationInteractor)
-	interactor.UserRepository = new(FakeUserRepository)
-	interactor.FacebookGraphAPI = new(FakeFacebookGraphApi)
+	interactor.UserRepository = new(fakeUserRepository)
+	interactor.FacebookGraphAPI = graph
 
-	res, err := interactor.Register(req)
+	_, err := interactor.Register(req)
 
-	assert.NotNil(t, false, err)
-	assert.Nil(t, res)
+	assert.NotNil(t, err)
 	assert.NotEmpty(t, err.Error())
 }
 
@@ -69,15 +75,18 @@ func TestIfEmailExistsShouldReturnUserFromDatabase(t *testing.T) {
 	req.Email = email
 	req.Name = "vitor"
 	req.FacebookID = "32132"
-	req.FacebookAccessToken = "rewrw"
+	req.FacebookAccessToken = "valid"
 	req.PhotoURL = "http://photo.url.com.br"
 
-	fakeRepository := new(FakeUserRepository)
+	fakeRepository := new(fakeUserRepository)
 	fakeRepository.On("FindByEmail", email).Return(domain.OptionalUser{Valid: true, User: domain.NewUser("registered", email, "fbid")})
+
+	graph := new(fakeFacebookGraphAPI)
+	graph.On("ValidateAccessToken", req.FacebookAccessToken).Return(true)
 
 	interactor := new(RegistrationInteractor)
 	interactor.UserRepository = fakeRepository
-	interactor.FacebookGraphAPI = new(FakeFacebookGraphApi)
+	interactor.FacebookGraphAPI = graph
 
 	res, err := interactor.Register(req)
 
@@ -86,16 +95,68 @@ func TestIfEmailExistsShouldReturnUserFromDatabase(t *testing.T) {
 	assert.NotNil(t, res.User)
 }
 
-type FakeUserRepository struct{ mock.Mock }
-type FakeFacebookGraphApi struct{ mock.Mock }
+func TestInvalidAccessTokenShouldReturnError(t *testing.T) {
+	req := new(RegistrationRequest)
+	req.Email = "test@test.com"
+	req.Name = "vitor"
+	req.FacebookAccessToken = "invalid"
+	req.PhotoURL = "http://photo.url.com.br"
 
-func (fake *FakeUserRepository) Save(user domain.User) {}
+	graph := new(fakeFacebookGraphAPI)
+	graph.On("ValidateAccessToken", req.FacebookAccessToken).Return(false)
 
-func (fake *FakeUserRepository) FindByEmail(email string) domain.OptionalUser {
+	interactor := new(RegistrationInteractor)
+	interactor.UserRepository = new(fakeUserRepository)
+	interactor.FacebookGraphAPI = graph
+
+	_, err := interactor.Register(req)
+
+	assert.NotNil(t, err)
+	assert.NotEmpty(t, err.Error())
+}
+
+func TestIfEmailDoesntExistsShouldReturnNewUser(t *testing.T) {
+	req := new(RegistrationRequest)
+	req.Email = "test@test.com"
+	req.Name = "vitor"
+	req.FacebookID = "32132"
+	req.FacebookAccessToken = "valid"
+	req.PhotoURL = "http://photo.url.com.br"
+
+	fakeRepository := new(fakeUserRepository)
+	fakeRepository.On("FindByEmail", req.Email).Return(domain.OptionalUser{Valid: false})
+
+	graph := new(fakeFacebookGraphAPI)
+	graph.On("ValidateAccessToken", req.FacebookAccessToken).Return(true)
+
+	interactor := new(RegistrationInteractor)
+	interactor.UserRepository = fakeRepository
+	interactor.FacebookGraphAPI = graph
+
+	res, err := interactor.Register(req)
+
+	assert.NotNil(t, res)
+	assert.Nil(t, err)
+	assert.NotNil(t, res.User)
+	assert.True(t, res.Created)
+	assert.Equal(t, "test@test.com", res.User.Email)
+	assert.Equal(t, "vitor", res.User.Name)
+	assert.Equal(t, "32132", res.User.FacebookID)
+	assert.Equal(t, "http://photo.url.com.br", res.User.PhotoURL)
+}
+
+type fakeUserRepository struct{ mock.Mock }
+type fakeFacebookGraphAPI struct{ mock.Mock }
+
+func (fake *fakeUserRepository) Save(user domain.User) {}
+
+func (fake *fakeUserRepository) FindByEmail(email string) domain.OptionalUser {
 	args := fake.Called(email)
 	return args.Get(0).(domain.OptionalUser)
 }
 
-func (fake *FakeFacebookGraphApi) ValidateAccessToken(accessToken string) bool {
-	return true
+func (fake *fakeFacebookGraphAPI) ValidateAccessToken(accessToken string) bool {
+	args := fake.Called(accessToken)
+
+	return args.Get(0).(bool)
 }

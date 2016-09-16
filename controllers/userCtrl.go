@@ -9,15 +9,18 @@ import (
 )
 
 type (
+	// RegistrationInteractor ...
 	RegistrationInteractor interface {
 		Register(req *interactors.RegistrationRequest) (*interactors.RegistrationResult, error)
 	}
 
+	// UserCtrl ...
 	UserCtrl struct {
 		Interactor RegistrationInteractor
 	}
 )
 
+// Post find or create a user in application
 func (ctrl *UserCtrl) Post(c echo.Context) error {
 	req := new(interactors.RegistrationRequest)
 

@@ -7,3 +7,5 @@ import:
 - package: github.com/stretchr/testify
 - package: github.com/huandu/facebook
 - package: github.com/asaskevich/govalidator
+- package: gopkg.in/caarlos0/env.v2
+  version: ^2.0.0

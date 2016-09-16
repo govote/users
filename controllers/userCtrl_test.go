@@ -88,6 +88,17 @@ func TestAlreadyRegisteredUserShouldReturnOk200(t *testing.T) {
 	assert.Equal(t, http.StatusOK, res.Code)
 }
 
+func TestEmptyJSONShouldReturnError(t *testing.T) {
+	userCtrl := new(UserCtrl)
+	c, _, err := test.CreateJSONContext("")
+
+	test.PanicErr(err)
+
+	err = userCtrl.Post(c)
+
+	assert.NotNil(t, err)
+}
+
 type FakeRegistrationInteractor struct{ mock.Mock }
 
 func (fake *FakeRegistrationInteractor) Register(request *interactors.RegistrationRequest) (*interactors.RegistrationResult, error) {

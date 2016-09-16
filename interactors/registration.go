@@ -18,6 +18,8 @@ type (
 		FacebookAccessToken string `valid:"required"`
 	}
 
+	// RegistrationResult represents the result of registration interaction
+	// Created will be true if a new user has been created in database
 	RegistrationResult struct {
 		Created bool
 		User    domain.User
@@ -48,6 +50,7 @@ func (interactor *RegistrationInteractor) Register(req *RegistrationRequest) (*R
 	}
 
 	user := domain.NewUser(req.Name, req.Email, req.FacebookID)
+	user.PhotoURL = req.PhotoURL
 
 	return &RegistrationResult{Created: true, User: user}, nil
 }
