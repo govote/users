@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"os"
 
+	"github.com/deputadosemfoco/users/network"
 	"github.com/deputadosemfoco/users/routes"
 	"github.com/dimiro1/banner"
 	_ "github.com/go-sql-driver/mysql"
@@ -19,15 +20,12 @@ func main() {
 	defer in.Close()
 	banner.Init(os.Stdout, true, false, in)
 
-	e := routes.SetUp()
-
-	if os.Getenv("GO_ENV") == "development" {
-		e.SetDebug(true)
-	}
+	network.FacebookAPP()
 
 	port := os.Getenv("PORT")
 
 	fmt.Printf("auth service wiil run on port %s", port)
 
+	e := routes.SetUp()
 	e.Run(standard.New(":" + port))
 }

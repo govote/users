@@ -10,7 +10,7 @@ import (
 
 type (
 	RegistrationInteractor interface {
-		Register(req *interactors.RegistrationRequest) interactors.RegistrationResult
+		Register(req *interactors.RegistrationRequest) (*interactors.RegistrationResult, error)
 	}
 
 	UserCtrl struct {
@@ -25,17 +25,16 @@ func (ctrl *UserCtrl) Post(c echo.Context) error {
 		return err
 	}
 
-	res := ctrl.Interactor.Register(req)
+	res, err := ctrl.Interactor.Register(req)
 
-	if res.Success {
-		code := http.StatusOK
-
-		if res.Created {
-			code = http.StatusCreated
-		}
-
-		return c.JSON(code, res.Data)
+	if err != nil {
+		return c.JSON(http.StatusBadRequest, messages.Error{Message: err.Error()})
 	}
 
-	return c.JSON(http.StatusBadRequest, messages.Error{Message: res.Message, ValidationMessages: res.ValidationMessages})
+	code := http.StatusOK
+	if res.Created {
+		code = http.StatusCreated
+	}
+
+	return c.JSON(code, res.User)
 }

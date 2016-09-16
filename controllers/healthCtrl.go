@@ -11,5 +11,5 @@ type HealthCtrl struct{}
 
 // Check simple returns an OK if application is running
 func (ctrl *HealthCtrl) Check(c echo.Context) error {
-	return c.NoContent(http.StatusOK)
+	return c.NoContent(http.StatusNoContent)
 }

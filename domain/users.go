@@ -4,6 +4,7 @@ import (
 	"time"
 
 	"github.com/deputadosemfoco/go-libs/domain"
+
 	"github.com/satori/go.uuid"
 )
 
@@ -34,12 +35,12 @@ type (
 )
 
 // NewUser is the preferred way to build a User struct
-func NewUser(name, email string) User {
+func NewUser(name, email, fbId string) User {
 	return User{
-		ID:    uuid.NewV4().String(),
-		Name:  name,
-		Email: email,
-
-		Entity: domain.Entity{CreatedAt: time.Now().UTC(), UpdatedAt: time.Now().UTC()},
+		ID:         uuid.NewV4().String(),
+		Name:       name,
+		Email:      email,
+		FacebookID: fbId,
+		Entity:     domain.Entity{CreatedAt: time.Now().UTC(), UpdatedAt: time.Now().UTC()},
 	}
 }

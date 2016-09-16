@@ -1,10 +1,10 @@
 package controllers
 
 import (
+	"errors"
 	"net/http"
 	"testing"
 
-	"github.com/deputadosemfoco/go-libs/messages"
 	"github.com/deputadosemfoco/users/interactors"
 	"github.com/deputadosemfoco/users/test"
 	"github.com/stretchr/testify/assert"
@@ -22,10 +22,10 @@ func TestWhenCreatingNewUserStatusCodeMustBeCreated201(t *testing.T) {
 	userCtrl := new(UserCtrl)
 	fakeInteractor := new(FakeRegistrationInteractor)
 
-	fakeInteractor.On("Register", param).Return(interactors.RegistrationResult{Response: messages.Response{Success: true}, Created: true})
+	fakeInteractor.On("Register", param).Return(&interactors.RegistrationResult{Created: true}, nil)
 	userCtrl.Interactor = fakeInteractor
 
-	c, res, err := test.CreateJsonContext(param)
+	c, res, err := test.CreateJSONContext(param)
 
 	test.PanicErr(err)
 
@@ -47,10 +47,10 @@ func TestUserWithInvalidInformationShouldReturnBadRequest400(t *testing.T) {
 	userCtrl := new(UserCtrl)
 	fakeInteractor := new(FakeRegistrationInteractor)
 
-	fakeInteractor.On("Register", param).Return(interactors.RegistrationResult{Response: messages.Response{Success: false, Message: "error"}})
+	fakeInteractor.On("Register", param).Return(&interactors.RegistrationResult{}, errors.New("error"))
 	userCtrl.Interactor = fakeInteractor
 
-	c, res, err := test.CreateJsonContext(param)
+	c, res, err := test.CreateJSONContext(param)
 
 	test.PanicErr(err)
 
@@ -73,10 +73,10 @@ func TestAlreadyRegisteredUserShouldReturnOk200(t *testing.T) {
 	userCtrl := new(UserCtrl)
 	fakeInteractor := new(FakeRegistrationInteractor)
 
-	fakeInteractor.On("Register", param).Return(interactors.RegistrationResult{Response: messages.Response{Success: true}, Created: false})
+	fakeInteractor.On("Register", param).Return(&interactors.RegistrationResult{Created: false}, nil)
 	userCtrl.Interactor = fakeInteractor
 
-	c, res, err := test.CreateJsonContext(param)
+	c, res, err := test.CreateJSONContext(param)
 
 	test.PanicErr(err)
 
@@ -90,8 +90,8 @@ func TestAlreadyRegisteredUserShouldReturnOk200(t *testing.T) {
 
 type FakeRegistrationInteractor struct{ mock.Mock }
 
-func (fake *FakeRegistrationInteractor) Register(request *interactors.RegistrationRequest) interactors.RegistrationResult {
+func (fake *FakeRegistrationInteractor) Register(request *interactors.RegistrationRequest) (*interactors.RegistrationResult, error) {
 	args := fake.Called(request)
 
-	return args.Get(0).(interactors.RegistrationResult)
+	return args.Get(0).(*interactors.RegistrationResult), args.Error(1)
 }

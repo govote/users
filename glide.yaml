@@ -5,3 +5,5 @@ import:
 - package: github.com/joho/godotenv
 - package: github.com/dimiro1/banner
 - package: github.com/stretchr/testify
+- package: github.com/huandu/facebook
+- package: github.com/asaskevich/govalidator
