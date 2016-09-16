@@ -25,6 +25,7 @@ func main() {
 	port := os.Getenv("PORT")
 
 	fmt.Printf("auth service wiil run on port %s", port)
+	fmt.Println("")
 
 	e := routes.SetUp()
 	e.Run(standard.New(":" + port))
