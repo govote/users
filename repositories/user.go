@@ -1,16 +1,13 @@
 package repositories
 
-import (
-	"github.com/deputadosemfoco/go-libs/sqldb"
-	"github.com/deputadosemfoco/users/domain"
-)
+import "github.com/deputadosemfoco/users/domain"
 
 // SQLUserRepository is a MySQL implementation for UserRepository
 type SQLUserRepository struct{}
 
 // Save the User to data store
 func (repo *SQLUserRepository) Save(user domain.User) {
-	db := sqldb.Connect()
+	db := Connect()
 	sql := ""
 
 	if user.ID == "" {
@@ -26,7 +23,7 @@ func (repo *SQLUserRepository) Save(user domain.User) {
 // Must receive a valid email address
 // Returns a OptionalUser that may or may not contain a User inside
 func (repo *SQLUserRepository) FindByEmail(email string) domain.OptionalUser {
-	db := sqldb.Connect()
+	db := Connect()
 	sql := "SELECT id, name, email, photoUrl, facebookId, googleId, createdAt, updatedAt FROM user WHERE email = ?"
 	user := domain.User{}
 

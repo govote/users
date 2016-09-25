@@ -23,7 +23,6 @@ func SetUp() *echo.Echo {
 	e.Use(middleware.Recover())
 	e.SetHTTPErrorHandler(errorHandler)
 	e.Use(middleware.Gzip())
-	e.Use(middleware.BodyLimit("1K"))
 
 	healthCtrl := controllers.HealthCtrl{}
 	userCtrl := buildUserController()
