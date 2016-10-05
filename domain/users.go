@@ -35,12 +35,12 @@ type (
 )
 
 // NewUser is the preferred way to build a User struct
-func NewUser(name, email, fbId string) User {
+func NewUser(name, email, fbID string) User {
 	return User{
 		ID:         uuid.NewV4().String(),
 		Name:       name,
 		Email:      email,
-		FacebookID: fbId,
+		FacebookID: fbID,
 		Entity:     domain.Entity{CreatedAt: time.Now().UTC(), UpdatedAt: time.Now().UTC()},
 	}
 }

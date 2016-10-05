@@ -27,8 +27,8 @@ func main() {
 	port := os.Getenv("PORT")
 	e := routes.SetUp()
 
-	fmt.Printf("auth service wiil run on port %s", port)
+	fmt.Printf("auth service will run on port %s", port)
 	fmt.Println("")
 
-	e.Run(standard.New(":" + port))
+	e.Run(standard.New(":" + "8081"))
 }
