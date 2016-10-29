@@ -5,6 +5,9 @@ sudo: false
 go:
   - tip
 
+services:
+ - docker
+
 before_install:
   - go get github.com/mattn/goveralls
   - curl https://glide.sh/get | sh
