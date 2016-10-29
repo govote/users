@@ -13,3 +13,7 @@ import:
 - package: github.com/deputadosemfoco/go-libs
   subpackages:
   - test
+- package: github.com/labstack/gommon
+  version: v0.1.0
+  subpackages:
+  - random
