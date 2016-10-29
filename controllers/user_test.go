@@ -5,8 +5,8 @@ import (
 	"net/http"
 	"testing"
 
+	"github.com/deputadosemfoco/go-libs/test"
 	"github.com/deputadosemfoco/users/interactors"
-	"github.com/deputadosemfoco/users/test"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
 )
