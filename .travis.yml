@@ -1,11 +1,27 @@
 language: go
+
 sudo: false
+
 go:
   - tip
+
 before_install:
   - go get github.com/mattn/goveralls
+  - curl https://glide.sh/get | sh
+
+install:
+  - glide install
+
 script:
+  - go test -v $(glide novendor)
+  - go build
   - $HOME/gopath/bin/goveralls -service=travis-ci
+
+after_success:
+  - docker build -t deputadosemfoco/users:latest .
+  - docker login -e="$DOCKER_EMAIL" -u="$DOCKER_USERNAME" -p="$DOCKER_PASSWORD"
+  - docker push deputadosemfoco/users
+
 env:
   global:
     secure: QKo69sq1QSxdIQtZor49GBhWU019E5z1SNd7sQkC/s+bRpu8tO2CYU4dF9dXG1o0nETHdcw88by32tvpC7o8/vqSL6/5X2wydIc14+ZnEhpyWMY5sRAxAam32MrUJK5bUdhgBiPhCUdjd8q68miJr8JRG2MHajyDGPMFNSYk7Cy7ElVaR7MmU3kNgzJ8EM7wXBooKf6eZgbPFtgMoa2XUX22zws2Vv3MDS94K5meLRDkzNPvinQkH+OQhNqxU2c+9NJzBFXhsj1K55S21qzra2Jsfid42XpGTa97xI+RZCHBvq1bBEY5MxFo49m0dmud0pTWz3tMGL4qNJKTCp6umdTK1p6RhQeCzyxldS8IQWojZMlwu3YDR9IGFNLrjDdJ07yaNyEb6LcGiJTAcpl+tvz2Pclu/OeCPildps5buI17miEO2NSWXiHDmsNLb962D1IOPkErYDUIkIyJTNuW28lN+erPxd6GOh5FTu0Oexq2/wEUlA1lNItX/knDyZ3iop+qZU232txS39gzVqXWBYG/h/cd+NrJxtwYayMN2+UWdGAMMNGDTrGoSi4hPDu6DO2Fg10LzVu3NdTQkXvfWHom9FFbiettrFBh5HW9VxMlX9IkRS/sBSWGhNTR6GtwpBd7Y71snhfPqU1eS3bqGK7AIVHiK0CliKxIVIK0siQ=

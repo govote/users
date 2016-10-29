@@ -8,6 +8,10 @@
 
 ## Required Environment Variables
 
-GO_ENV ("development" || "production")  
+GO_ENV  
 PORT  
-APP_VERSION   
+APP_VERSION  
+MYSQL_URI  
+FB_ID  
+FB_SECRET  
+FB_VERSION  

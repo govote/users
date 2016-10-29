@@ -25,6 +25,11 @@ type (
 		User    domain.User
 	}
 
+	// RegistrationInteractorContract ...
+	RegistrationInteractorContract interface {
+		Register(req *RegistrationRequest) (*RegistrationResult, error)
+	}
+
 	// RegistrationInteractor is the interface for all registration operations
 	RegistrationInteractor struct {
 		UserRepository   domain.UserRepository

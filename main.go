@@ -9,14 +9,11 @@ import (
 	"github.com/deputadosemfoco/users/routes"
 	"github.com/dimiro1/banner"
 	_ "github.com/go-sql-driver/mysql"
-
-	"github.com/joho/godotenv"
+	_ "github.com/joho/godotenv/autoload"
 	"github.com/labstack/echo/engine/standard"
 )
 
 func main() {
-	godotenv.Load()
-
 	in, _ := os.Open("banner.txt")
 	defer in.Close()
 	banner.Init(os.Stdout, true, false, in)
@@ -30,5 +27,5 @@ func main() {
 	fmt.Printf("auth service will run on port %s", port)
 	fmt.Println("")
 
-	e.Run(standard.New(":" + "8081"))
+	e.Run(standard.New(":" + port))
 }

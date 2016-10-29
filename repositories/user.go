@@ -35,3 +35,20 @@ func (repo *SQLUserRepository) FindByEmail(email string) domain.OptionalUser {
 
 	return domain.OptionalUser{Valid: true, User: user}
 }
+
+// FindByFacebookID searches a User by its facebook ID.
+// Must receive a valid facebook ID
+// Returns a OptionalUser that may or may not contain a User inside
+func (repo *SQLUserRepository) FindByFacebookID(facebookID string) domain.OptionalUser {
+	db := Connect()
+	sql := "SELECT id, name, email, photoUrl, facebookId, googleId, createdAt, updatedAt FROM user WHERE facebookId = ?"
+	user := domain.User{}
+
+	err := db.Get(user, sql, facebookID)
+
+	if err != nil {
+		return domain.OptionalUser{Valid: false}
+	}
+
+	return domain.OptionalUser{Valid: true, User: user}
+}

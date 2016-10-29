@@ -8,19 +8,12 @@ import (
 	"github.com/labstack/echo"
 )
 
-type (
-	// RegistrationInteractor ...
-	RegistrationInteractor interface {
-		Register(req *interactors.RegistrationRequest) (*interactors.RegistrationResult, error)
-	}
+// UserCtrl ...
+type UserCtrl struct {
+	Interactor interactors.RegistrationInteractorContract
+}
 
-	// UserCtrl ...
-	UserCtrl struct {
-		Interactor RegistrationInteractor
-	}
-)
-
-// Post find or create a user in application
+// Post 
 func (ctrl *UserCtrl) Post(c echo.Context) error {
 	req := new(interactors.RegistrationRequest)
 

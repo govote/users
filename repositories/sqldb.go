@@ -14,7 +14,7 @@ var (
 
 // Bootstrap configures MySQL connection
 func Bootstrap() *sqlx.DB {
-	dbURI = os.Getenv("MYSQLURI")
+	dbURI = os.Getenv("MYSQL_URI")
 	db = Connect()
 
 	err := db.Ping()

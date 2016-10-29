@@ -31,6 +31,7 @@ type (
 	UserRepository interface {
 		Save(user User)
 		FindByEmail(email string) OptionalUser
+		FindByFacebookID(facebookID string) OptionalUser
 	}
 )
 
