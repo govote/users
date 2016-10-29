@@ -8,7 +8,7 @@ import (
 	"testing"
 
 	"github.com/deputadosemfoco/go-libs/messages"
-	"github.com/deputadosemfoco/users/test"
+	"github.com/deputadosemfoco/go-libs/test"
 	"github.com/labstack/echo"
 	"github.com/stretchr/testify/assert"
 )
